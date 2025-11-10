@@ -1,0 +1,2 @@
+# Kept as an alias so existing instructions still work.
+-r requirements/dev.txt

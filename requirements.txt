@@ -1,0 +1,11 @@
+# The full local install: pipeline plus the audio path.
+#
+# This used to be a `pip freeze` — every transitive dependency pinned, torch
+# and spaCy included, with no way to tell a direct dependency from something
+# Streamlit happened to drag in. The direct dependencies now live in
+# requirements/, split by what actually needs them:
+#
+#   requirements/base.txt   the conversation pipeline and the UI
+#   requirements/audio.txt  microphone, VAD and local speech synthesis
+#   requirements/dev.txt    pytest and ruff
+-r requirements/audio.txt
