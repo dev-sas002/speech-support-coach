@@ -1,0 +1,54 @@
+# One place for the tooling the project actually runs: `ruff check`,
+# `ruff format --check` and `pytest` all read their configuration from here.
+
+[project]
+name = "ai-voice-assistant"
+version = "1.0.0"
+description = "A bank support call simulator: transcribe, decide, speak — with every turn timed."
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["project_venv", ".venv"]
+
+[tool.ruff.lint]
+select = [
+  "E",    # pycodestyle errors
+  "W",    # pycodestyle warnings
+  "F",    # pyflakes
+  "I",    # import ordering
+  "UP",   # pyupgrade
+  "B",    # bugbear
+  "C4",   # comprehensions
+  "SIM",  # simplifications
+  "RUF",  # ruff-specific
+]
+ignore = [
+  # Deferred imports are a deliberate pattern here, not an oversight: audio
+  # libraries bind to hardware at import time and the model SDKs are heavy,
+  # so several modules import inside a function. Each site says why.
+  "E402",
+  # Blind `except Exception` guards the boundaries with providers and with
+  # the UI, where the correct behaviour is to degrade rather than propagate.
+  "BLE001",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Tests reach into private helpers on purpose, and their fakes mirror vendor
+# shapes rather than following our own naming.
+"tests/*" = ["SIM117", "B011"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+  # webrtcvad imports pkg_resources at module scope; nothing here can fix it.
+  "ignore:pkg_resources is deprecated as an API:UserWarning",
+]
