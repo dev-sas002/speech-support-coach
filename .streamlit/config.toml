@@ -1,0 +1,19 @@
+# Committed on purpose: the look of the page is part of the deliverable, and a
+# reviewer opening the app should see the same thing the screenshots show.
+# Secrets are excluded by .gitignore, not this file.
+[theme]
+base = "light"
+primaryColor = "#4338ca"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f8f9fc"
+textColor = "#101828"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+[client]
+# The Deploy button belongs to Streamlit Cloud, not to this app.
+toolbarMode = "minimal"

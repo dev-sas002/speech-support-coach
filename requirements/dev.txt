@@ -1,0 +1,7 @@
+# Test and lint tooling. Deliberately does not include the audio extras: the
+# suite stubs every device and every network call, so the whole of it runs on
+# the base install.
+-r base.txt
+pytest==8.3.3
+pytest-cov==5.0.0
+ruff==0.14.0

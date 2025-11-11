@@ -1,0 +1,8 @@
+# Everything the conversation pipeline needs: the UI, the provider SDK, the
+# state machine. No audio hardware, no model weights, no compiler — this set
+# installs from wheels on any platform and is what the container ships.
+groq==0.33.0
+loguru==0.7.3
+numpy==2.3.4
+python-dotenv==1.2.1
+streamlit==1.51.0

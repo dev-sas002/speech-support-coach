@@ -1,0 +1,13 @@
+# The audio path: microphone capture, voice activity detection, and local
+# speech synthesis. Kokoro pulls in torch, transformers and spaCy, which is
+# several gigabytes — install this only on a machine that has a microphone and
+# a speaker, and expect the download to take a while.
+#
+# sounddevice needs PortAudio, simpleaudio needs ALSA headers, and webrtcvad
+# compiles from source on most interpreters.
+-r base.txt
+kokoro==0.9.4
+simpleaudio==1.0.4
+sounddevice==0.5.3
+torch==2.9.0
+webrtcvad==2.0.10
