@@ -1,0 +1,50 @@
+# One command, no manual steps:
+#
+#   docker compose up -d --build   then open http://localhost:8110
+#
+# No API key is required. Without GROQ_API_KEY the language model falls back to
+# the scripted local agent, so the conversation loop, the rolling window, the
+# latency measurement and the call review all run offline — and the UI says
+# which providers it resolved rather than leaving you to guess.
+services:
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    image: ai-voice-assistant:local
+    container_name: voice_support_ui
+    environment:
+      # Absent or a placeholder selects the scripted agent.
+      GROQ_API_KEY: ${GROQ_API_KEY:-}
+      GROQ_LLM_MODEL: ${GROQ_LLM_MODEL:-openai/gpt-oss-20b}
+      GROQ_ASR_MODEL: ${GROQ_ASR_MODEL:-whisper-large-v3-turbo}
+      # Provider selection: auto resolves by what is usable here.
+      LLM_PROVIDER: ${LLM_PROVIDER:-auto}
+      STT_PROVIDER: ${STT_PROVIDER:-auto}
+      TTS_PROVIDER: ${TTS_PROVIDER:-auto}
+      # A container has no microphone or speaker. Text mode exercises the same
+      # pipeline without audio hardware.
+      VOICE_IO: text
+      TURN_BUDGET_MS: ${TURN_BUDGET_MS:-1200}
+      # Play a real opening exchange through the engine on first load, so the
+      # app is not an empty page on first boot.
+      SEED_DEMO_CALL: ${SEED_DEMO_CALL:-1}
+    ports:
+      - "8110:8501"
+    volumes:
+      - ./logs:/app/logs
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - |
+          import sys, urllib.request
+          sys.exit(0 if urllib.request.urlopen(
+              "http://127.0.0.1:8501/_stcore/health", timeout=4).status == 200 else 1)
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
+    restart: unless-stopped
