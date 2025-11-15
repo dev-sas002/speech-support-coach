@@ -1,0 +1,39 @@
+# Version control and history
+.git
+.gitignore
+
+# Virtualenvs — the image builds its own
+project_venv
+venv
+.venv
+ENV
+env
+
+# Caches and build output
+__pycache__
+**/__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+.coverage
+htmlcov
+build
+dist
+*.egg-info
+
+# Secrets and local state
+.env
+.streamlit/secrets.toml
+logs/*.csv
+
+# Things the running image has no use for
+docs
+scripts
+README.preview.html
+.github
+.idea
+.vscode
+.DS_Store
+
+# The audio extras are not installed in the image, so their requirements file
+# is not copied either; base.txt and dev.txt are copied explicitly.
